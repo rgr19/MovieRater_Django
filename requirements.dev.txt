@@ -1,0 +1,6 @@
+Django
+dj-static
+dj-database-url
+djangorestframework
+django-cors-headers
+python-decouple
