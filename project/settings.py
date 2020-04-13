@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from decouple import config
+from pprint import pprint
+
+import decouple
+import dj_database_url
 from dj_database_url import parse as dburl
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -21,16 +24,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = decouple.config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+DEBUG = decouple.config('DEBUG', default=True)
 
-ALLOWED_HOSTS = [
-	'10.0.2.2',
-	'localhost',
-	'127.0.0.1',
-]
+ALLOWED_HOSTS = decouple.config('ALLOWED_HOSTS').split()
+print(ALLOWED_HOSTS)
 # Application definition
+
+CORS_ORIGIN_WHITELIST = decouple.config('CORS_ORIGIN_WHITELIST',).split()
+print(CORS_ORIGIN_WHITELIST)
 
 INSTALLED_APPS = [
 	'django.contrib.admin',
@@ -79,23 +82,13 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-local_sqlite_path = os.path.join(BASE_DIR, 'data', 'db', 'db.sqlite3')
-
-if DEBUG:
-	DATABASES = {
-		'default':
-			{
-				'ENGINE': 'django.db.backends.sqlite3',
-				'NAME': local_sqlite_path,
-			}
-	}
-else:
-	default_dburl = 'sqlite:///' + os.path.join(local_sqlite_path)
-	# env DATABASE_URL provided by HEROKU
-	DATABASES = {
-		'default': config('DATABASE_URL', default=default_dburl, cast=dburl)
-	}
+localSqlitePath = os.path.join(BASE_DIR, 'data', 'db', 'db.sqlite3')
+defaultSqliteDburl = 'sqlite:///' + localSqlitePath
+# env DATABASE_URL provided by HEROKU
+defaultDatabase = decouple.config('DATABASE_URL', default=defaultSqliteDburl, cast=dj_database_url.parse)
+DATABASES = {
+	'default': defaultDatabase
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -121,11 +114,6 @@ REST_FRAMEWORK = {
 	)
 }
 
-CORS_ORIGIN_WHITELIST = [
-	'http://localhost:4200',
-	'http://127.0.0.1:4200',
-	'http://10.0.2.15'
-]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -144,7 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,  'data', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'data', 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,  'data', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'data', 'media')
