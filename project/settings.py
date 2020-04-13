@@ -28,7 +28,7 @@ DEBUG = config('DEBUG')
 ALLOWED_HOSTS = [
 	'10.0.2.2',
 	'localhost',
-
+	'127.0.0.1',
 ]
 # Application definition
 
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, '..', '..', 'templates')],
+		'DIRS': [os.path.join(BASE_DIR, 'templates')],
 		'APP_DIRS': True,
 		'OPTIONS': {
 			'context_processors': [
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-local_sqlite_path = os.path.join(BASE_DIR, '..', '..', 'data', 'db', 'db.sqlite3')
+local_sqlite_path = os.path.join(BASE_DIR, 'data', 'db', 'db.sqlite3')
 
 if DEBUG:
 	DATABASES = {
@@ -144,7 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '..', '..', 'data', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR,  'data', 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'data', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR,  'data', 'media')
